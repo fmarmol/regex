@@ -46,6 +46,9 @@ func FindGroups(pattern *regexp.Regexp, s string) Groups {
 	ret := map[string]string{}
 
 	matches := pattern.FindStringSubmatch(s)
+	if len(matches) == 0 {
+		return ret
+	}
 
 	for _, groupName := range pattern.SubexpNames() {
 		index := pattern.SubexpIndex(groupName)
