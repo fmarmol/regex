@@ -3,6 +3,7 @@ package regex
 import (
 	"fmt"
 	"regexp"
+	"strconv"
 )
 
 type Groups map[string]string
@@ -12,10 +13,31 @@ func (g Groups) Get(groupName string) (string, bool) {
 	return ret, ok
 }
 
+func (g Groups) GetAsInt(groupName string) (int, bool, error) {
+	ret, ok := g.Get(groupName)
+	if !ok {
+		return 0, ok, nil
+	}
+	res, err := strconv.Atoi(ret)
+	return res, true, err
+
+}
+
 func (g Groups) MustGet(groupName string) string {
 	ret, ok := g.Get(groupName)
 	if !ok {
 		panic(fmt.Errorf("Group name: %v not found.", groupName))
+	}
+	return ret
+}
+
+func (g Groups) MustGetAsInt(groupName string) int {
+	ret, ok, err := g.GetAsInt(groupName)
+	if !ok {
+		panic(fmt.Errorf("Group name: %v not found.", groupName))
+	}
+	if err != nil {
+		panic(fmt.Errorf("Group name: %v could not cast as integer: %v.", groupName, err))
 	}
 	return ret
 }
