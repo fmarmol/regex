@@ -13,4 +13,5 @@ func TestFindGroups(t *testing.T) {
 	groups := FindGroups(regexp.MustCompile(source), "123 foo")
 	assert.Equal(t, "123", groups.MustGet("one"))
 	assert.Equal(t, "foo", groups.MustGet("two"))
+	assert.Equal(t, 123, groups.MustGetAsInt("one"))
 }
