@@ -23,6 +23,15 @@ func (g Groups) GetAsInt(groupName string) (int, bool, error) {
 
 }
 
+func (g Groups) GetAsFloat(groupName string) (float64, bool, error) {
+	ret, ok := g.Get(groupName)
+	if !ok {
+		return 0, ok, nil
+	}
+	res, err := strconv.ParseFloat(ret, 64)
+	return res, true, err
+}
+
 func (g Groups) MustGet(groupName string) string {
 	ret, ok := g.Get(groupName)
 	if !ok {
@@ -33,6 +42,16 @@ func (g Groups) MustGet(groupName string) string {
 
 func (g Groups) MustGetAsInt(groupName string) int {
 	ret, ok, err := g.GetAsInt(groupName)
+	if !ok {
+		panic(fmt.Errorf("Group name: %v not found.", groupName))
+	}
+	if err != nil {
+		panic(fmt.Errorf("Group name: %v could not cast as integer: %v.", groupName, err))
+	}
+	return ret
+}
+func (g Groups) MustGetAsFloat(groupName string) float64 {
+	ret, ok, err := g.GetAsFloat(groupName)
 	if !ok {
 		panic(fmt.Errorf("Group name: %v not found.", groupName))
 	}
